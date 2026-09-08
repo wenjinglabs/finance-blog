@@ -247,18 +247,18 @@ export default function Gallery() {
       </Tabs>
 
       <Dialog open={openIdx !== null} onOpenChange={(o) => !o && setOpenIdx(null)}>
-        <DialogContent className="flex flex-col items-center gap-2">
+        <DialogContent className="flex flex-col items-center gap-2 sm:max-w-[min(90vw,900px)]">
           {openKey && (
             <>
-              <div className="relative flex max-h-[80vh] w-full items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg">
-                {!fullLoaded && <div className="absolute inset-0 animate-pulse rounded-lg bg-zinc-200 dark:bg-zinc-700" />}
+              <div className="relative flex h-[56vh] max-h-[80vh] min-h-[320px] w-full items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-[62vh]">
+                {!fullLoaded && <div className="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-700" />}
                 <img
                   ref={fullRef}
                   src={openKey ? fullOf(mode, openKey) : ""}
                   alt={openKey ? captionOf(mode, openKey) : ""}
                   onLoad={() => setFullLoaded(true)}
                   onError={() => setFullLoaded(true)}
-                  className="relative max-h-[80vh] max-w-full rounded-lg object-contain"
+                  className="relative max-h-[80vh] max-w-full object-contain"
                 />
               </div>
               <div className="flex items-center gap-2">
