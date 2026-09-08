@@ -56,6 +56,8 @@ export default function CompressClient() {
   const [targeting, setTargeting] = useState(false)
   const [items, setItems] = useState<Item[]>([])
   const [dragOver, setDragOver] = useState(false)
+  const [compare, setCompare] = useState(false)
+  const [pos, setPos] = useState(50)
   const inputRef = useRef<HTMLInputElement>(null)
   const single = items.length === 1 ? items[0] : null
   const step: 1 | 2 | 3 = items.length === 0 ? 1 : single?.loading || targeting ? 2 : single?.outUrl ? 3 : 2
@@ -214,27 +216,65 @@ export default function CompressClient() {
           </div>
         </Card>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Card className="overflow-hidden">
-            <div className="flex h-7 items-center px-3 text-xs font-medium text-muted-foreground">原图 · {fmt(single.file.size)} · {single.w ? `${single.w}×${single.h}` : ""}</div>
-            <div className="aspect-[4/3] bg-muted p-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={single.url} alt="orig" className="h-full w-full object-contain" />
-            </div>
-          </Card>
+        {compare && single.outUrl && !single.loading && !targeting ? (
           <Card className="overflow-hidden">
             <div className="flex h-7 items-center justify-between px-3 text-xs font-medium">
-              <span className="text-muted-foreground">WebP · {single.outSize !== null ? fmt(single.outSize) : "—"}</span>
-              {saving !== null && Number(saving) > 0 && <span className="rounded bg-green-500/10 px-1.5 py-0.5 text-green-700 dark:text-green-400">省 {saving}%</span>}
+              <span className="text-muted-foreground">拖动对比 · 左原图 右WebP</span>
+              <Button variant="outline" size="sm" className="h-5 px-2 text-xs" onClick={() => setCompare(false)}>退出对比</Button>
             </div>
-            <div className="aspect-[4/3] bg-muted p-2">
-              {single.loading || targeting ? <div className="h-full w-full animate-pulse rounded bg-background/60" /> : single.outUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={single.outUrl} alt="webp" className="h-full w-full object-contain" />
-              ) : <div className="flex h-full items-center justify-center text-xs text-muted-foreground">转换失败</div>}
+            <div
+              className="relative aspect-[16/9] select-none overflow-hidden bg-muted"
+              onMouseMove={(e) => {
+                const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
+                setPos(Math.max(5, Math.min(95, ((e.clientX - r.left) / r.width) * 100)))
+              }}
+              onTouchMove={(e) => {
+                const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
+                const x = e.touches[0].clientX
+                setPos(Math.max(5, Math.min(95, ((x - r.left) / r.width) * 100)))
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={single.outUrl} alt="webp" className="absolute inset-0 h-full w-full object-contain bg-muted p-2" />
+              <div className="absolute inset-0 overflow-hidden bg-muted p-2" style={{ width: `${pos}%` }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={single.url} alt="orig" className="h-full w-full object-contain" style={{ width: `${100 * (100 / pos)}%`, maxWidth: "none" }} />
+                <span className="absolute left-2 top-2 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">原图</span>
+              </div>
+              <div className="absolute inset-y-0 w-0.5 bg-white shadow" style={{ left: `${pos}%` }} />
+              <div className="absolute top-1/2 size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border bg-white shadow flex items-center justify-center" style={{ left: `${pos}%` }}>
+                <span className="text-xs">↔</span>
+              </div>
+              <span className="absolute right-2 top-2 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">WebP {saving ? `省${saving}%` : ""}</span>
+              <input type="range" min={5} max={95} value={pos} onChange={(e) => setPos(Number(e.target.value))} className="absolute bottom-2 left-1/2 w-32 -translate-x-1/2 accent-white" />
             </div>
           </Card>
-        </div>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Card className="overflow-hidden">
+              <div className="flex h-7 items-center px-3 text-xs font-medium text-muted-foreground">原图 · {fmt(single.file.size)} · {single.w ? `${single.w}×${single.h}` : ""}</div>
+              <div className="aspect-[4/3] bg-muted p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={single.url} alt="orig" className="h-full w-full object-contain" />
+              </div>
+            </Card>
+            <Card className="overflow-hidden">
+              <div className="flex h-7 items-center justify-between px-3 text-xs font-medium">
+                <span className="text-muted-foreground">WebP · {single.outSize !== null ? fmt(single.outSize) : "—"}</span>
+                <span className="flex items-center gap-1">
+                  {saving !== null && Number(saving) > 0 && <span className="rounded bg-green-500/10 px-1.5 py-0.5 text-green-700 dark:text-green-400">省 {saving}%</span>}
+                  {single.outUrl && !single.loading && <button onClick={() => setCompare(true)} className="rounded bg-foreground px-1.5 py-0.5 text-xs text-background">拖动对比</button>}
+                </span>
+              </div>
+              <div className="aspect-[4/3] bg-muted p-2">
+                {single.loading || targeting ? <div className="h-full w-full animate-pulse rounded bg-background/60" /> : single.outUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={single.outUrl} alt="webp" className="h-full w-full object-contain" />
+                ) : <div className="flex h-full items-center justify-center text-xs text-muted-foreground">转换失败</div>}
+              </div>
+            </Card>
+          </div>
+        )}
 
         <Button className="w-full" disabled={!single.outUrl || single.loading || targeting} onClick={() => download(single)}>
           <Download />{single.loading || targeting ? "处理中…" : "下载 WebP — 第 3 步"}
