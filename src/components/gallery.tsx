@@ -112,7 +112,7 @@ export default function Gallery() {
   const openKey = openIdx === null ? null : keys[openIdx]
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-5xl px-4 py-8">
+    <div className="min-h-screen w-full">
       <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "-ml-3 mb-6")}>
         <ArrowLeft /> 返回博客
       </Link>
