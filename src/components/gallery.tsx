@@ -74,28 +74,31 @@ function pageWindow(cur: number, n: number) {
 
 function Thumb({ src, alt, aspect, eager }: { src: string; alt: string; aspect: string; eager?: boolean }) {
   const [loaded, setLoaded] = useState(false)
-  const imgRef = useRef<HTMLImageElement | null>(null)
-  // 首次/更新时若已缓存完成直接显示，避免 lazy + 透明一直盖住
+  const ref = useRef<HTMLImageElement | null>(null)
   useEffect(() => { setLoaded(false) }, [src])
-  const setRef = useCallback((el: HTMLImageElement | null) => {
-    imgRef.current = el
+  const onLoad = useCallback(() => setLoaded(true), [])
+  useEffect(() => {
+    const el = ref.current
     if (el && el.complete && el.naturalWidth > 0) setLoaded(true)
-  }, [])
+    else if (el) {
+      const h = () => setLoaded(true)
+      el.addEventListener("load", h, { once: true })
+      el.addEventListener("error", h, { once: true })
+      return () => { el.removeEventListener("load", h); el.removeEventListener("error", h) }
+    }
+  }, [src])
   return (
     <div className={cn("relative w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800", aspect)}>
       {!loaded && <div className="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-700" />}
       <img
-        ref={setRef}
+        ref={ref}
         src={src}
         alt={alt}
         loading={eager ? "eager" : "lazy"}
         decoding="async"
-        onLoad={() => setLoaded(true)}
-        onError={() => setLoaded(true)}
-        className={cn(
-          "relative h-full w-full object-cover transition duration-300 group-hover:scale-105",
-          loaded ? "opacity-100" : "opacity-0"
-        )}
+        onLoad={onLoad}
+        onError={onLoad}
+        className="relative h-full w-full object-cover transition duration-300 group-hover:scale-105"
       />
     </div>
   )
@@ -139,14 +142,19 @@ export default function Gallery() {
     return () => window.removeEventListener("keydown", onKey)
   }, [openIdx, keys.length])
 
+  const openKey = openIdx === null ? null : keys[openIdx]
   useEffect(() => { setFullLoaded(false) }, [openIdx])
   const fullRef = useRef<HTMLImageElement | null>(null)
-  const setFullRef = useCallback((el: HTMLImageElement | null) => {
-    fullRef.current = el
+  useEffect(() => {
+    const el = fullRef.current
     if (el && el.complete && el.naturalWidth > 0) setFullLoaded(true)
-  }, [])
-
-  const openKey = openIdx === null ? null : keys[openIdx]
+    else if (el) {
+      const h = () => setFullLoaded(true)
+      el.addEventListener("load", h, { once: true })
+      el.addEventListener("error", h, { once: true })
+      return () => { el.removeEventListener("load", h); el.removeEventListener("error", h) }
+    }
+  }, [openKey])
 
   return (
     <div className="min-h-screen w-full">
@@ -245,12 +253,12 @@ export default function Gallery() {
               <div className="relative flex max-h-[80vh] w-full items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                 {!fullLoaded && <div className="absolute inset-0 animate-pulse rounded-lg bg-zinc-200 dark:bg-zinc-700" />}
                 <img
-                  ref={setFullRef}
+                  ref={fullRef}
                   src={openKey ? fullOf(mode, openKey) : ""}
                   alt={openKey ? captionOf(mode, openKey) : ""}
                   onLoad={() => setFullLoaded(true)}
                   onError={() => setFullLoaded(true)}
-                  className={cn("relative max-h-[80vh] max-w-full rounded-lg object-contain transition-opacity duration-300", fullLoaded ? "opacity-100" : "opacity-0")}
+                  className="relative max-h-[80vh] max-w-full rounded-lg object-contain"
                 />
               </div>
               <div className="flex items-center gap-2">
