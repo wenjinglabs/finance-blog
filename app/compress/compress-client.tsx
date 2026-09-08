@@ -11,6 +11,7 @@ type Item = {
   w: number
   h: number
   outUrl: string | null
+  outBlob: Blob | null
   outSize: number | null
   loading: boolean
 }
@@ -59,12 +60,12 @@ export default function CompressClient() {
       })
       const w = img.naturalWidth || 0
       const h = img.naturalHeight || 0
-      setItems((prev) => [...prev, { id, file, url, w, h, outUrl: null, outSize: null, loading: true }])
+      setItems((prev) => [...prev, { id, file, url, w, h, outUrl: null, outBlob: null, outSize: null, loading: true }])
       try {
         const { blob } = await toWebp(file, quality / 100)
         const outUrl = URL.createObjectURL(blob)
         setItems((prev) =>
-          prev.map((it) => (it.id === id ? { ...it, outUrl, outSize: blob.size, loading: false } : it))
+          prev.map((it) => (it.id === id ? { ...it, outUrl, outBlob: blob, outSize: blob.size, loading: false } : it))
         )
       } catch {
         setItems((prev) => prev.map((it) => (it.id === id ? { ...it, loading: false } : it)))
@@ -77,11 +78,11 @@ export default function CompressClient() {
     async (quality: number) => {
       for (const it of items) {
         if (!it.file) continue
-        setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, loading: true, outUrl: null, outSize: null } : p)))
+        setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, loading: true, outUrl: null, outBlob: null, outSize: null } : p)))
         try {
           const { blob } = await toWebp(it.file, quality / 100)
           const outUrl = URL.createObjectURL(blob)
-          setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, outUrl, outSize: blob.size, loading: false } : p)))
+          setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, outUrl, outBlob: blob, outSize: blob.size, loading: false } : p)))
         } catch {
           setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, loading: false } : p)))
         }
@@ -127,6 +128,28 @@ export default function CompressClient() {
   const downloadAll = async () => {
     for (const it of items) if (it.outUrl) download(it)
   }
+
+  const downloadZip = async () => {
+    const ready = items.filter((it) => it.outBlob)
+    if (ready.length === 0) return
+    const JSZip = (await import("jszip")).default
+    const zip = new JSZip()
+    ready.forEach((it) => {
+      zip.file(it.file.name.replace(/\.[^.]+$/, "") + ".webp", it.outBlob!)
+    })
+    const blob = await zip.generateAsync({ type: "blob" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `compress-${Date.now()}.zip`
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const done = items.filter((it) => it.outSize !== null)
+  const totalIn = done.reduce((s, it) => s + it.file.size, 0)
+  const totalOut = done.reduce((s, it) => s + (it.outSize ?? 0), 0)
+  const totalSaving = totalIn > 0 ? ((1 - totalOut / totalIn) * 100).toFixed(0) : null
 
   return (
     <div className="min-h-screen w-full">
@@ -177,26 +200,41 @@ export default function CompressClient() {
 
       {/* 质量控制 */}
       {items.length > 0 && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <span className="text-sm font-medium">质量 {q}%</span>
-          <input
-            type="range"
-            min={40}
-            max={95}
-            value={q}
-            onChange={(e) => onQ(Number(e.target.value))}
-            className="h-2 w-48 accent-foreground"
-          />
-          <Button size="sm" variant="outline" onClick={applyQ}>
-            <Sparkles /> 应用到全部
-          </Button>
-          <span className="text-xs text-muted-foreground">改完点一下重转</span>
-          {items.some((it) => it.outUrl) && (
-            <Button size="sm" onClick={downloadAll} className="ml-auto">
-              <Download /> 全部下载
+        <>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <span className="text-sm font-medium">质量 {q}%</span>
+            <input
+              type="range"
+              min={40}
+              max={95}
+              value={q}
+              onChange={(e) => onQ(Number(e.target.value))}
+              className="h-2 w-48 accent-foreground"
+            />
+            <Button size="sm" variant="outline" onClick={applyQ}>
+              <Sparkles /> 应用到全部
             </Button>
+            <span className="text-xs text-muted-foreground">改完点一下重转</span>
+            {items.some((it) => it.outUrl) && (
+              <div className="ml-auto flex gap-2">
+                <Button size="sm" variant="outline" onClick={downloadAll}>
+                  逐个下载
+                </Button>
+                <Button size="sm" onClick={downloadZip}>
+                  <Download /> 打包 ZIP
+                </Button>
+              </div>
+            )}
+          </div>
+          {done.length > 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              已转 {done.length} 张 · {fmt(totalIn)} → {fmt(totalOut)}
+              {totalSaving !== null && Number(totalSaving) > 0 && (
+                <span className="ml-1 font-medium text-green-700 dark:text-green-400">省 {totalSaving}%</span>
+              )}
+            </p>
           )}
-        </div>
+        </>
       )}
 
       {/* 列表 */}
