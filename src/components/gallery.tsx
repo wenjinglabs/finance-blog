@@ -72,11 +72,31 @@ function pageWindow(cur: number, n: number) {
   return [...s].filter((p) => p >= 1 && p <= n).sort((a, b) => a - b)
 }
 
+function Thumb({ src, alt, aspect }: { src: string; alt: string; aspect: string }) {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <div className={cn("relative w-full overflow-hidden bg-muted", aspect)}>
+      {!loaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        className={cn(
+          "h-full w-full object-cover transition duration-300 group-hover:scale-105",
+          loaded ? "opacity-100" : "opacity-0"
+        )}
+      />
+    </div>
+  )
+}
+
 export default function Gallery() {
   const [mode, setMode] = useState("u")
   const [film, setFilm] = useState("")
   const [page, setPage] = useState(1)
   const [openIdx, setOpenIdx] = useState<number | null>(null)
+  const [fullLoaded, setFullLoaded] = useState(false)
 
   const keys = useMemo(() => {
     if (mode === "u") return USER_KEYS
@@ -108,6 +128,8 @@ export default function Gallery() {
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [openIdx, keys.length])
+
+  useEffect(() => { setFullLoaded(false) }, [openIdx])
 
   const openKey = openIdx === null ? null : keys[openIdx]
 
@@ -165,15 +187,7 @@ export default function Gallery() {
                   onClick={() => setOpenIdx(idx)}
                   className="group overflow-hidden rounded-lg bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <img
-                    src={thumbOf(mode, k)}
-                    alt={captionOf(mode, k)}
-                    loading="lazy"
-                    className={cn(
-                      "w-full bg-muted object-cover transition-transform group-hover:scale-105",
-                      mode === "u" ? "aspect-square" : "aspect-[16/10]"
-                    )}
-                  />
+                  <Thumb src={thumbOf(mode, k)} alt={captionOf(mode, k)} aspect={mode === "u" ? "aspect-square" : "aspect-[16/10]"} />
                 </button>
               )
             })}
@@ -213,11 +227,15 @@ export default function Gallery() {
         <DialogContent className="flex flex-col items-center gap-2">
           {openKey && (
             <>
-              <img
-                src={openKey ? fullOf(mode, openKey) : ""}
-                alt={openKey ? captionOf(mode, openKey) : ""}
-                className="max-h-[80vh] max-w-full rounded-lg object-contain"
-              />
+              <div className="relative flex max-h-[80vh] w-full items-center justify-center">
+                {!fullLoaded && <div className="absolute inset-0 animate-pulse rounded-lg bg-muted" />}
+                <img
+                  src={openKey ? fullOf(mode, openKey) : ""}
+                  alt={openKey ? captionOf(mode, openKey) : ""}
+                  onLoad={() => setFullLoaded(true)}
+                  className={cn("max-h-[80vh] max-w-full rounded-lg object-contain transition-opacity duration-300", fullLoaded ? "opacity-100" : "opacity-0")}
+                />
+              </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
