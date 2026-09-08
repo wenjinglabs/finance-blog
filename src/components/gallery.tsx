@@ -75,15 +75,17 @@ function pageWindow(cur: number, n: number) {
 function Thumb({ src, alt, aspect }: { src: string; alt: string; aspect: string }) {
   const [loaded, setLoaded] = useState(false)
   return (
-    <div className={cn("relative w-full overflow-hidden bg-muted", aspect)}>
-      {!loaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
+    <div className={cn("relative w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800", aspect)}>
+      {!loaded && <div className="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-700" />}
       <img
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
         className={cn(
-          "h-full w-full object-cover transition duration-300 group-hover:scale-105",
+          "relative h-full w-full object-cover transition duration-300 group-hover:scale-105",
           loaded ? "opacity-100" : "opacity-0"
         )}
       />
@@ -227,13 +229,14 @@ export default function Gallery() {
         <DialogContent className="flex flex-col items-center gap-2">
           {openKey && (
             <>
-              <div className="relative flex max-h-[80vh] w-full items-center justify-center">
-                {!fullLoaded && <div className="absolute inset-0 animate-pulse rounded-lg bg-muted" />}
+              <div className="relative flex max-h-[80vh] w-full items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                {!fullLoaded && <div className="absolute inset-0 animate-pulse rounded-lg bg-zinc-200 dark:bg-zinc-700" />}
                 <img
                   src={openKey ? fullOf(mode, openKey) : ""}
                   alt={openKey ? captionOf(mode, openKey) : ""}
                   onLoad={() => setFullLoaded(true)}
-                  className={cn("max-h-[80vh] max-w-full rounded-lg object-contain transition-opacity duration-300", fullLoaded ? "opacity-100" : "opacity-0")}
+                  onError={() => setFullLoaded(true)}
+                  className={cn("relative max-h-[80vh] max-w-full rounded-lg object-contain transition-opacity duration-300", fullLoaded ? "opacity-100" : "opacity-0")}
                 />
               </div>
               <div className="flex items-center gap-2">

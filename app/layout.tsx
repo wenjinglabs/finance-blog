@@ -10,21 +10,21 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ggaag.com"),
-  title: "梗酱",
+  title: "ggaag",
   description: "梗图社区背后的技术博客",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "梗酱",
+    title: "ggaag",
     description: "梗图社区背后的技术博客",
     url: "/",
-    siteName: "梗酱",
+    siteName: "ggaag",
     locale: "zh_CN",
     type: "website",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "梗酱" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "梗酱",
+    title: "ggaag",
     description: "梗图社区背后的技术博客",
     images: ["/og.png"],
   },
@@ -41,8 +41,8 @@ function Nav() {
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-4">
-        <Link href="/" className="text-base font-semibold tracking-tight">
-          梗酱
+        <Link href="/" className="font-mono text-base font-semibold tracking-[0.18em]">
+          ggaag
         </Link>
         <nav className="flex items-center gap-1">
           {links.map(({ href, label, Icon }) => (
