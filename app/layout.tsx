@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Archive, Home, Images } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import "./globals.css"
 
@@ -26,11 +28,12 @@ function Nav() {
         </Link>
         <nav className="flex items-center gap-1">
           {links.map(({ href, label, Icon }) => (
-            <Link key={href} href={href} className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}>
+            <Link key={href} href={href} className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "px-2 sm:px-3")}>
               <Icon />
-              {label}
+              <span className="hidden sm:inline">{label}</span>
             </Link>
           ))}
+          <ThemeToggle />
         </nav>
       </div>
     </header>
@@ -39,14 +42,16 @@ function Nav() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" className="dark">
+    <html lang="zh-CN" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <Nav />
-        <main className="mx-auto w-full max-w-3xl px-4 py-10">{children}</main>
-        <footer className="mx-auto w-full max-w-3xl px-4 pb-10">
-          <Separator className="mb-4" />
-          <p className="text-xs text-muted-foreground">梗酱的技术博客 · Next.js + shadcn</p>
-        </footer>
+        <ThemeProvider>
+          <Nav />
+          <main className="mx-auto w-full max-w-3xl px-4 py-10">{children}</main>
+          <footer className="mx-auto w-full max-w-3xl px-4 pb-10">
+            <Separator className="mb-4" />
+            <p className="text-xs text-muted-foreground">梗酱的技术博客 · Next.js + shadcn</p>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   )

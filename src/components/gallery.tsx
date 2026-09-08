@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import {
   ArrowLeft,
   ChevronLeft,
@@ -10,7 +11,7 @@ import {
   ExternalLink,
   Images,
 } from "lucide-react"
-import { Button } from "./ui/button"
+import { Button, buttonVariants } from "./ui/button"
 import { Dialog, DialogContent } from "./ui/dialog"
 import {
   Select,
@@ -112,11 +113,11 @@ export default function Gallery() {
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-5xl px-4 py-8">
-      <a href="/" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="size-4" /> 返回博客
-      </a>
-      <div className="mb-2 flex items-baseline gap-3">
-        <h1 className="text-2xl font-bold">图库</h1>
+      <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "-ml-3 mb-6")}>
+        <ArrowLeft /> 返回博客
+      </Link>
+      <div className="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">图库</h1>
         <p className="text-sm text-muted-foreground">
           {mode === "u" ? `${USER_KEYS.length} 张` : `${keys.length} 枚`} · 缩略图懒加载 + 分页，点击看原图
         </p>
@@ -124,11 +125,11 @@ export default function Gallery() {
 
       <Tabs value={mode} onValueChange={switchMode} className="mt-4">
         <div className="flex flex-wrap items-center gap-3">
-          <TabsList>
-            <TabsTrigger value="u">
+          <TabsList className="w-full sm:w-auto">
+            <TabsTrigger value="u" className="flex-1 sm:flex-none">
               <Images /> 我的图库
             </TabsTrigger>
-            <TabsTrigger value="g">
+            <TabsTrigger value="g" className="flex-1 sm:flex-none">
               <Clapperboard /> 吉卜力剧照
             </TabsTrigger>
           </TabsList>
@@ -178,8 +179,8 @@ export default function Gallery() {
             })}
           </div>
 
-          <div className="mt-6 flex items-center justify-center gap-1">
-            <Button variant="outline" size="icon" disabled={cur <= 1} onClick={() => setPage(1)}>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-1">
+            <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur <= 1} onClick={() => setPage(1)}>
               <ChevronsLeft />
             </Button>
             <Button variant="outline" size="icon" disabled={cur <= 1} onClick={() => setPage(cur - 1)}>
@@ -198,7 +199,7 @@ export default function Gallery() {
             <Button variant="outline" size="icon" disabled={cur >= n} onClick={() => setPage(cur + 1)}>
               <ChevronRight />
             </Button>
-            <Button variant="outline" size="icon" disabled={cur >= n} onClick={() => setPage(n)}>
+            <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur >= n} onClick={() => setPage(n)}>
               <ChevronsRight />
             </Button>
           </div>
