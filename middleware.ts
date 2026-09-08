@@ -6,14 +6,20 @@ export function middleware(req: NextRequest) {
   const h = host.split(":")[0].toLowerCase()
   const url = req.nextUrl
 
-  // ggaag.com / www.ggaag.com 的首页直接重写到 /compress（URL 保持 /，内容是工具）
-  if ((h === "ggaag.com" || h === "www.ggaag.com") && url.pathname === "/") {
-    url.pathname = "/compress"
-    return NextResponse.rewrite(url)
+  // ggaag.com / www.ggaag.com 首页即工具
+  if (h === "ggaag.com" || h === "www.ggaag.com") {
+    if (url.pathname === "/") {
+      url.pathname = "/compress"
+      return NextResponse.rewrite(url)
+    }
+    if (url.pathname === "/compress" || url.pathname === "/compress/") {
+      url.pathname = "/"
+      return NextResponse.redirect(url, 308)
+    }
   }
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/compress", "/compress/"],
 }
