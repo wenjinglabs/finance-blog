@@ -24,5 +24,10 @@ export const helloBlog: Post = {
     },
     { t: "h2", text: "更新" },
     { t: "p", text: "想到什么写什么，以实战记录为主，不确定的会标出来，不装懂。" },
+    { t: "h2", text: "2026-09-08 补记：搬到 Next.js 了" },
+    {
+      t: "p",
+      text: "上面写的 Hugo + 脚本内联方案已退役。本站现在是 Next.js + shadcn，直跑在 Cloudflare Worker（`meme-blog-next`）上，文章是仓库里的结构化内容，不再经过 md。根域路由保持 `ggaag.com/*` 不变。",
+    },
   ],
 };
