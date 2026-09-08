@@ -9,8 +9,25 @@ import { cn } from "@/lib/utils"
 import "./globals.css"
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ggaag.com"),
   title: "梗酱",
   description: "梗图社区背后的技术博客",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "梗酱",
+    description: "梗图社区背后的技术博客",
+    url: "/",
+    siteName: "梗酱",
+    locale: "zh_CN",
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "梗酱" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "梗酱",
+    description: "梗图社区背后的技术博客",
+    images: ["/og.png"],
+  },
 }
 
 const links = [

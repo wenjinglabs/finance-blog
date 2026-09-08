@@ -15,14 +15,39 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const post = getPost((await params).slug)
   if (!post) return {}
-  return { title: `${post.title} | 梗酱`, description: post.description }
+  return {
+    title: `${post.title} | 梗酱`,
+    description: post.description,
+    alternates: { canonical: `/posts/${post.slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url: `/posts/${post.slug}`,
+      type: "article",
+      publishedTime: post.date,
+      images: [{ url: "/og.png", width: 1200, height: 630 }],
+    },
+  }
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const post = getPost((await params).slug)
   if (!post) notFound()
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    mainEntityOfPage: `https://ggaag.com/posts/${post.slug}`,
+    image: "https://ggaag.com/og.png",
+  }
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-6 -ml-3")}>
         <ArrowLeft />
         返回首页

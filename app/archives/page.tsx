@@ -1,6 +1,13 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { getPosts } from "@/lib/posts"
 import { Separator } from "@/components/ui/separator"
+
+export const metadata: Metadata = {
+  title: "归档 | 梗酱",
+  description: "梗酱博客文章归档",
+  alternates: { canonical: "/archives" },
+}
 
 export default function Archives() {
   const posts = getPosts()
