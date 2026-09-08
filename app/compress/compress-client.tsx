@@ -76,17 +76,25 @@ export default function CompressClient() {
 
   const reconvertAll = useCallback(
     async (quality: number) => {
-      for (const it of items) {
-        if (!it.file) continue
-        setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, loading: true, outUrl: null, outBlob: null, outSize: null } : p)))
-        try {
-          const { blob } = await toWebp(it.file, quality / 100)
-          const outUrl = URL.createObjectURL(blob)
-          setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, outUrl, outBlob: blob, outSize: blob.size, loading: false } : p)))
-        } catch {
-          setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, loading: false } : p)))
-        }
-      }
+      setItems((prev) => prev.map((p) => ({ ...p, loading: true })))
+      const results = await Promise.all(
+        items.map(async (it) => {
+          try {
+            const { blob } = await toWebp(it.file, quality / 100)
+            return { id: it.id, blob, url: URL.createObjectURL(blob) }
+          } catch {
+            return { id: it.id, blob: null as Blob | null, url: null as string | null }
+          }
+        })
+      )
+      setItems((prev) =>
+        prev.map((p) => {
+          const r = results.find((x) => x.id === p.id)
+          if (!r || !r.blob || !r.url) return { ...p, loading: false }
+          if (p.outUrl) URL.revokeObjectURL(p.outUrl)
+          return { ...p, outUrl: r.url, outBlob: r.blob, outSize: r.blob.size, loading: false }
+        })
+      )
     },
     [items]
   )
