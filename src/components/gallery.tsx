@@ -117,7 +117,7 @@ export default function Gallery() {
         <ArrowLeft /> 返回博客
       </Link>
       <div className="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">图库</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">酱の相簿</h1>
         <p className="text-sm text-muted-foreground">
           {mode === "u" ? `${USER_KEYS.length} 张` : `${keys.length} 枚`} · 缩略图懒加载 + 分页，点击看原图
         </p>
@@ -156,7 +156,7 @@ export default function Gallery() {
         )}
 
         <TabsContent value={mode} forceMount>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
             {items.map((k) => {
               const idx = keys.indexOf(k)
               return (

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const links = [
   { href: "/", label: "首页", Icon: Home },
   { href: "/archives", label: "归档", Icon: Archive },
-  { href: "/pics", label: "图库", Icon: Images },
+  { href: "/pics", label: "酱の相簿", Icon: Images },
 ]
 
 function Nav() {
