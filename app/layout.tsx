@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Archive, Home, Images } from "lucide-react"
+import { Archive, Home, Images, ImageDown } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -34,6 +34,7 @@ const links = [
   { href: "/", label: "首页", Icon: Home },
   { href: "/archives", label: "归档", Icon: Archive },
   { href: "/pics", label: "酱の相簿", Icon: Images },
+  { href: "/compress", label: "压缩", Icon: ImageDown },
 ]
 
 function Nav() {
