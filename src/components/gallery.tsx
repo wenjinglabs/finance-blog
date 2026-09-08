@@ -156,7 +156,7 @@ export default function Gallery() {
         )}
 
         <TabsContent value={mode} forceMount>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {items.map((k) => {
               const idx = keys.indexOf(k)
               return (
