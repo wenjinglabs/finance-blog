@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs"
 import U from "../data/gallery.json"
 import G from "../data/ghibli.json"
 import BIG from "../data/big.json"
@@ -192,7 +192,7 @@ export default function Gallery() {
           </p>
         )}
 
-        <TabsContent value={mode} forceMount>
+        <div className="mt-4">
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {items.map((k, i) => {
               const idx = keys.indexOf(k)
@@ -235,7 +235,7 @@ export default function Gallery() {
           <p className="mt-2 text-center text-xs text-muted-foreground">
             {cur} / {n}
           </p>
-        </TabsContent>
+        </div>
       </Tabs>
 
       <Dialog open={openIdx !== null} onOpenChange={(o) => !o && setOpenIdx(null)}>
