@@ -1,6 +1,6 @@
 "use client"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Check, Download, Image as ImageIcon, Loader2, Upload, X } from "lucide-react"
+import { Download, Image as ImageIcon, Loader2, Share2, Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -35,20 +35,7 @@ async function toWebp(file: File, quality: number): Promise<{ blob: Blob }> {
   return { blob }
 }
 
-function Steps({ step }: { step: 1 | 2 | 3 }) {
-  const s = (n: number) => (step === n ? "bg-foreground text-background" : step > n ? "bg-green-500 text-white" : "bg-muted text-muted-foreground")
-  const label = (n: number, t: string) => (
-    <span className="flex items-center gap-1.5 text-xs">
-      <span className={"flex size-5 items-center justify-center rounded-full text-xs font-medium " + s(n)}>{step > n ? <Check className="size-3" /> : n}</span>
-      <span className={step === n ? "font-medium text-foreground" : "text-muted-foreground"}>{t}</span>
-    </span>
-  )
-  return (
-    <div className="flex items-center gap-2">
-      {label(1, "选图")}<span className="h-px w-6 bg-border" />{label(2, "压缩")}<span className="h-px w-6 bg-border" />{label(3, "下载")}
-    </div>
-  )
-}
+
 
 export default function CompressClient() {
   const [q, setQ] = useState(80)
@@ -58,9 +45,10 @@ export default function CompressClient() {
   const [dragOver, setDragOver] = useState(false)
   const [compare, setCompare] = useState(false)
   const [pos, setPos] = useState(50)
+  const [canShare, setCanShare] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const single = items.length === 1 ? items[0] : null
-  const step: 1 | 2 | 3 = items.length === 0 ? 1 : single?.loading || targeting ? 2 : single?.outUrl ? 3 : 2
+  useEffect(() => { setCanShare(typeof navigator !== "undefined" && !!navigator.share) }, [])
 
   const convert = useCallback(async (file: File, quality: number) => {
     const id = Math.random().toString(36).slice(2)
@@ -147,6 +135,24 @@ export default function CompressClient() {
     if (!it.outUrl) return
     const a = document.createElement("a"); a.href = it.outUrl; a.download = it.file.name.replace(/\.[^.]+$/, "") + ".webp"; a.click()
   }
+  const share = async (it: Item) => {
+    if (!it.outBlob || !it.outUrl) return
+    const name = it.file.name.replace(/\.[^.]+$/, "") + ".webp"
+    try {
+      const file = new File([it.outBlob], name, { type: "image/webp" })
+      // @ts-ignore canShare with files
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: name })
+        return
+      }
+      if (navigator.share) {
+        await navigator.share({ title: name, text: `WebP ${fmt(it.outBlob.size)}`, url: it.outUrl })
+        return
+      }
+    } catch {}
+    // 降级：复制提示
+    try { await navigator.clipboard.writeText(it.outUrl) } catch {}
+  }
   const downloadZip = async () => {
     const ready = items.filter((it) => it.outBlob)
     if (ready.length === 0) return
@@ -160,11 +166,8 @@ export default function CompressClient() {
   if (items.length === 0) {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold tracking-tight">图片压缩</h1>
-          <Steps step={1} />
-        </div>
-        <p className="text-sm text-muted-foreground">第 1 步 · 选一张图，自动转 WebP，不上传</p>
+        <h1 className="text-lg font-semibold tracking-tight">图片压缩</h1>
+        <p className="text-sm text-muted-foreground">拖拽即转 WebP · 本地处理不上传</p>
         <Card
           onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
           onDragLeave={() => setDragOver(false)}
@@ -190,11 +193,6 @@ export default function CompressClient() {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold tracking-tight">图片压缩</h1>
-          <Steps step={step} />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{step === 2 ? "第 2 步 · 选清晰度或压到指定大小" : step === 3 ? "第 3 步 · 完成，下一步下载" : "第 2 步"}</p>
           <Button variant="outline" size="sm" onClick={() => remove(single.id)}><X />换一张</Button>
         </div>
 
@@ -276,9 +274,16 @@ export default function CompressClient() {
           </div>
         )}
 
-        <Button className="w-full" disabled={!single.outUrl || single.loading || targeting} onClick={() => download(single)}>
-          <Download />{single.loading || targeting ? "处理中…" : "下载 WebP — 第 3 步"}
-        </Button>
+        <div className="flex gap-2">
+          <Button className="flex-1" disabled={!single.outUrl || single.loading || targeting} onClick={() => download(single)}>
+            <Download />{single.loading || targeting ? "处理中…" : "下载 WebP"}
+          </Button>
+          {canShare && (
+            <Button variant="outline" className="flex-1" disabled={!single.outUrl || single.loading || targeting} onClick={() => share(single)}>
+              <Share2 />分享
+            </Button>
+          )}
+        </div>
         <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files && onFiles(e.target.files)} />
       </div>
     )
@@ -294,7 +299,6 @@ export default function CompressClient() {
         <h1 className="text-lg font-semibold">图片压缩 · {items.length} 张</h1>
         <Button variant="outline" size="sm" onClick={() => setItems((prev) => { prev.forEach((p) => { URL.revokeObjectURL(p.url); if (p.outUrl) URL.revokeObjectURL(p.outUrl) }); return [] })}>清空</Button>
       </div>
-      <Steps step={items.some((it) => it.loading) ? 2 : 3} />
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-xs font-medium">质量 {q}%</span>
         <input type="range" min={40} max={95} value={q} onChange={(e) => setQ(Number(e.target.value))} className="h-2 w-24 accent-foreground" />
