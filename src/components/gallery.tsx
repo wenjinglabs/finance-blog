@@ -53,10 +53,12 @@ function thumbOf(mode: string, k: string) {
   )
 }
 
-// 灯箱图：大文件走 l/*.webp（1600px，省~96%），其余直读原图
+// 灯箱图：统一走 l/*.webp（1600px q80），缺失时回落原图
+function webpOf(k: string) {
+  return "https://pics.ggaag.com/l/" + k.replace(/\.[^.]+$/, "") + ".webp"
+}
 function fullOf(mode: string, k: string) {
-  if (mode === "u" && BIG_SET.has(k))
-    return "https://pics.ggaag.com/l/" + k.replace(/\.[^.]+$/, "") + ".webp"
+  if (mode === "u") return webpOf(k)
   return ORIGIN + "/" + k
 }
 
@@ -247,18 +249,23 @@ export default function Gallery() {
       </Tabs>
 
       <Dialog open={openIdx !== null} onOpenChange={(o) => !o && setOpenIdx(null)}>
-        <DialogContent className="flex flex-col items-center gap-2 sm:max-w-[min(90vw,900px)]">
+        <DialogContent className="flex flex-col items-center gap-2 sm:max-w-[min(90vw,640px)] p-4">
           {openKey && (
             <>
-              <div className="relative flex h-[56vh] max-h-[80vh] min-h-[320px] w-full items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-[62vh]">
+              <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800">
                 {!fullLoaded && <div className="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-700" />}
                 <img
                   ref={fullRef}
                   src={openKey ? fullOf(mode, openKey) : ""}
                   alt={openKey ? captionOf(mode, openKey) : ""}
                   onLoad={() => setFullLoaded(true)}
-                  onError={() => setFullLoaded(true)}
-                  className="relative max-h-[80vh] max-w-full object-contain"
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement
+                    const fallback = ORIGIN + "/" + (openKey ?? "")
+                    if (img.src !== fallback) img.src = fallback
+                    setFullLoaded(true)
+                  }}
+                  className="relative h-full w-full object-contain p-2"
                 />
               </div>
               <div className="flex items-center gap-2">
