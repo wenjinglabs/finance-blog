@@ -5,27 +5,26 @@ import { Separator } from "@/components/ui/separator"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { StripRsc } from "@/components/strip-rsc"
-import { headers } from "next/headers"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ggaag.com"),
-  title: "ggaag - 工具箱",
-  description: "免费在线工具箱 · 图片压缩 · 本地处理不上传",
+  metadataBase: new URL("https://blog.ggaag.com"),
+  title: "梗酱 - 技术博客",
+  description: "梗图社区背后的技术博客",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "ggaag - 工具箱",
-    description: "免费在线工具箱 · 图片压缩 · 本地处理不上传",
+    title: "梗酱 - 技术博客",
+    description: "梗图社区背后的技术博客",
     url: "/",
-    siteName: "ggaag",
+    siteName: "梗酱",
     locale: "zh_CN",
     type: "website",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "梗酱" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ggaag - 工具箱",
-    description: "免费在线工具箱 · 本地处理不上传",
+    title: "梗酱 - 技术博客",
+    description: "梗图社区背后的技术博客",
     images: ["/og.png"],
   },
 }
@@ -60,27 +59,18 @@ function BlogNav() {
   )
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const h = (await headers()).get("host") || ""
-  const host = h.split(":")[0].toLowerCase()
-  const isBlog = host === "blog.ggaag.com" || host === "www.blog.ggaag.com"
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <StripRsc />
         <ThemeProvider>
-          {isBlog && <BlogNav />}
+          <BlogNav />
           <main className="mx-auto w-full max-w-3xl px-4 py-10">{children}</main>
           <footer className="mx-auto w-full max-w-3xl px-4 pb-10">
             <Separator className="mb-4" />
             <p className="text-xs text-muted-foreground">
-              {isBlog ? (
-                <>
-                  梗酱的技术博客 · Next.js + shadcn · <a href="https://ggaag.com" className="underline underline-offset-4">工具箱</a>
-                </>
-              ) : (
-                <>ggaag 工具箱 · 本地处理不上传</>
-              )}
+              梗酱的技术博客 · Next.js + shadcn · <a href="https://ggaag.com" className="underline underline-offset-4">工具箱</a>
             </p>
           </footer>
         </ThemeProvider>

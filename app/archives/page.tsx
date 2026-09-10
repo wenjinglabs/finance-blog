@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator"
 export const metadata: Metadata = {
   title: "归档 | 梗酱",
   description: "梗酱博客文章归档",
-  alternates: { canonical: "/blog/archives" },
+  alternates: { canonical: "/archives" },
 }
 
 export default function Archives() {
@@ -29,7 +29,7 @@ export default function Archives() {
             {ps.map((p) => (
               <Link
                 key={p.slug}
-                href={`/blog/posts/${p.slug}`}
+                href={`/posts/${p.slug}`}
                 className="flex items-baseline gap-4 rounded-md px-2 py-2 hover:bg-muted"
               >
                 <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
