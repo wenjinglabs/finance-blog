@@ -3,7 +3,6 @@ import Link from "next/link"
 import { Archive, Home, Images } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { StripRsc } from "@/components/strip-rsc"
 import "./globals.css"
 
@@ -52,7 +51,6 @@ function BlogNav() {
           <a href="https://ggaag.com" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             工具
           </a>
-          <ThemeToggle />
         </nav>
       </div>
     </header>
