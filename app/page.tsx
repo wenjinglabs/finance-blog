@@ -18,16 +18,11 @@ const tools = [
     badge: "热门",
   },
   {
-    href: "/blog/pics",
-    title: "酱の相簿",
-    desc: "我的图库 + 吉卜力剧照 550 枚",
-    Icon: Images,
-  },
-  {
-    href: "/blog",
-    title: "技术博客",
-    desc: "梗酱背后的技术笔记",
+    href: "/pdf",
+    title: "PDF 压缩",
+    desc: "本地栅格化重压 · 不上传 · 可调清晰度",
     Icon: FileDown,
+    badge: "新",
   },
 ]
 
@@ -57,7 +52,9 @@ export default function ToolsHome() {
           </Link>
         ))}
       </div>
-      <p className="mt-8 text-xs text-muted-foreground">后续 PDF 压缩等工具直接在此加卡片即可（纯前端本地处理）。</p>
+      <p className="mt-8 text-xs text-muted-foreground">
+        本站仅工具，博客已迁至 <a href="https://blog.ggaag.com" className="underline underline-offset-4">blog.ggaag.com</a>
+      </p>
     </div>
   )
 }
