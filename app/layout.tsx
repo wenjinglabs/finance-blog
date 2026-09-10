@@ -6,16 +6,17 @@ import { Separator } from "@/components/ui/separator"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
+import { StripRsc } from "@/components/strip-rsc"
 import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ggaag.com"),
-  title: "ggaag",
-  description: "梗图社区背后的技术博客",
+  title: "ggaag - 工具箱",
+  description: "免费在线工具箱 · 图片压缩 · 本地处理不上传",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "ggaag",
-    description: "梗图社区背后的技术博客",
+    title: "ggaag - 工具箱",
+    description: "免费在线工具箱 · 图片压缩 · 本地处理不上传",
     url: "/",
     siteName: "ggaag",
     locale: "zh_CN",
@@ -24,17 +25,17 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ggaag",
-    description: "梗图社区背后的技术博客",
+    title: "ggaag - 工具箱",
+    description: "免费在线工具箱 · 本地处理不上传",
     images: ["/og.png"],
   },
 }
 
 const links = [
-  { href: "/", label: "首页", Icon: Home },
-  { href: "/archives", label: "归档", Icon: Archive },
-  { href: "/pics", label: "酱の相簿", Icon: Images },
+  { href: "/", label: "工具", Icon: Home },
   { href: "/compress", label: "压缩", Icon: ImageDown },
+  { href: "/blog", label: "博客", Icon: Archive },
+  { href: "/blog/pics", label: "相簿", Icon: Images },
 ]
 
 function Nav() {
@@ -62,12 +63,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <StripRsc />
         <ThemeProvider>
           <Nav />
           <main className="mx-auto w-full max-w-3xl px-4 py-10">{children}</main>
           <footer className="mx-auto w-full max-w-3xl px-4 pb-10">
             <Separator className="mb-4" />
-            <p className="text-xs text-muted-foreground">梗酱的技术博客 · Next.js + shadcn</p>
+            <p className="text-xs text-muted-foreground">ggaag 工具箱 · 本地处理不上传 · <Link href="/blog" className="underline underline-offset-4">博客</Link></p>
           </footer>
         </ThemeProvider>
       </body>

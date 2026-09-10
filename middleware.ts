@@ -2,24 +2,29 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(req: NextRequest) {
-  const host = req.headers.get("host") || ""
-  const h = host.split(":")[0].toLowerCase()
   const url = req.nextUrl
+  const p = url.pathname
 
-  // ggaag.com / www.ggaag.com 首页即工具
-  if (h === "ggaag.com" || h === "www.ggaag.com") {
-    if (url.pathname === "/") {
-      url.pathname = "/compress"
-      return NextResponse.rewrite(url)
-    }
-    if (url.pathname === "/compress" || url.pathname === "/compress/") {
-      url.pathname = "/"
-      return NextResponse.redirect(url, 308)
-    }
+  // 旧博客路径 308 到 /blog/*
+  if (p === "/posts" || p === "/posts/") {
+    url.pathname = "/blog"
+    return NextResponse.redirect(url, 308)
+  }
+  if (p.startsWith("/posts/")) {
+    url.pathname = "/blog" + p
+    return NextResponse.redirect(url, 308)
+  }
+  if (p === "/archives" || p === "/archives/") {
+    url.pathname = "/blog/archives"
+    return NextResponse.redirect(url, 308)
+  }
+  if (p === "/pics" || p === "/pics/") {
+    url.pathname = "/blog/pics"
+    return NextResponse.redirect(url, 308)
   }
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/", "/compress", "/compress/"],
+  matcher: ["/posts", "/posts/", "/posts/:path*", "/archives", "/archives/", "/pics", "/pics/"],
 }
