@@ -8,7 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: BASE, lastModified: posts[0]?.date.slice(0, 10) },
     { url: `${BASE}/archives` },
-    { url: `${BASE}/pics` },
+    { url: `${BASE}/about` },
+    { url: `${BASE}/privacy` },
     ...posts.map((p) => ({ url: `${BASE}/posts/${p.slug}`, lastModified: p.date.slice(0, 10) })),
   ]
 }

@@ -1,0 +1,26 @@
+# GGAAG Finance Notes
+
+> Practical personal finance notes written with the math shown: cash flow, emergency funds, index funds, asset allocation, and scam awareness. Bilingual (English primary, Chinese toggle). All content is educational, not financial advice.
+
+Site: https://blog.ggaag.com
+Language: en (primary), zh (client-side toggle, same URLs)
+
+## Guides
+
+- [Start Here: The Order of Operations for Your Money](https://blog.ggaag.com/posts/finance-start): The sequence that matters — employer match, high-interest debt, emergency fund, then investing.
+- [Track Your Cash Flow](https://blog.ggaag.com/posts/finance-ledger): A three-category tracking system (fixed / flexible / irregular) and the three questions to answer after 30 days.
+- [The Emergency Fund](https://blog.ggaag.com/posts/finance-emergency-fund): Sizing from expenses (3-6 months), where to park it, and three failure modes.
+- [Index Funds and Dollar-Cost Averaging](https://blog.ggaag.com/posts/finance-index-dca): What DCA actually earns; a 1% fee gap consumes ~23% of final wealth over 40 years.
+- [Compound Interest: Two Details Nobody Mentions](https://blog.ggaag.com/posts/finance-compound): Rear-loaded gains (half the 30-year result lands in the final decade) and nominal vs real returns.
+- [Asset Allocation](https://blog.ggaag.com/posts/finance-allocation): Three-bucket structure and scheduled rebalancing, with a worked 60/40 example.
+- [Avalanche vs Snowball](https://blog.ggaag.com/posts/finance-debt-order): Same $600/month budget simulated on the same three debts — $923 and 2 months apart, first payoff 4 months earlier with snowball.
+- [Investment Scams](https://blog.ggaag.com/posts/finance-scam): Three structures every pitch reduces to, plus a one-question test.
+- [Nasdaq Drawdowns in Numbers](https://blog.ggaag.com/posts/finance-nasdaq-drawdown): Every major Nasdaq decline since 2000 — depth and time-to-recovery — and the three moves with math behind them.
+- [50/30/20 vs Zero-Based Budgeting](https://blog.ggaag.com/posts/finance-budget-methods): Where each method breaks, and the savings-rate ladder (each 5 points = ~$500k over 30 years) that matters more than the method.
+- [Lump Sum vs Dollar-Cost Averaging](https://blog.ggaag.com/posts/finance-lump-sum-vs-dca): 155 years of S&P 500 data, every starting month — lump sum wins 77% since 1950; DCA-12 costs ~5% expected; 3-month schedules cost under 1%.
+- [Rent vs Buy: The Break-Even Math](https://blog.ggaag.com/posts/finance-rent-vs-buy): Full model of a $400k home vs renting and investing the difference; buying wins when appreciation beats investment return by ~2.6%/yr.
+
+## Pages
+
+- [About](https://blog.ggaag.com/about): Editorial stance, disclaimer, contact.
+- [Privacy Policy](https://blog.ggaag.com/privacy): Analytics and advertising cookies disclosure.

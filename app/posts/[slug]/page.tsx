@@ -1,12 +1,7 @@
-import Link from "next/link"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ArrowLeft, CalendarDays } from "lucide-react"
 import { getPost, getPosts } from "@/lib/posts"
-import { PostBody } from "@/components/post-body"
-import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
+import { PostView } from "@/components/post-view"
 
 export function generateStaticParams() {
   return getPosts().map((p) => ({ slug: p.slug }))
@@ -16,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getPost((await params).slug)
   if (!post) return {}
   return {
-    title: `${post.title} | 梗酱`,
+    title: `${post.title} | GGAAG Finance Notes`,
     description: post.description,
     alternates: { canonical: `/posts/${post.slug}` },
     openGraph: {
@@ -31,8 +26,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const post = getPost((await params).slug)
+  const slug = (await params).slug
+  const post = getPost(slug)
   if (!post) notFound()
+
+  // 按站内排序（新→旧）计算上下篇：prev 更新的一篇，next 更旧的一篇
+  const ordered = getPosts()
+  const idx = ordered.findIndex((p) => p.slug === slug)
+  const toNav = (p?: (typeof ordered)[number]) =>
+    p ? { slug: p.slug, title: p.title, zhTitle: p.zh?.title } : undefined
+  const prev = toNav(ordered[idx - 1])
+  const next = toNav(ordered[idx + 1])
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -41,34 +46,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     datePublished: post.date,
     mainEntityOfPage: `https://blog.ggaag.com/posts/${post.slug}`,
     image: "https://blog.ggaag.com/og.png",
+    author: { "@type": "Person", name: "GGAAG", url: "https://blog.ggaag.com/about" },
+    publisher: { "@type": "Organization", name: "GGAAG Finance Notes", url: "https://blog.ggaag.com" },
   }
   return (
-    <article>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-6 -ml-3")}>
-        <ArrowLeft />
-        返回首页
-      </Link>
-      <h1 className="text-3xl font-semibold tracking-tight">{post.title}</h1>
-      {post.description && (
-        <p className="mt-3 text-lg text-muted-foreground">{post.description}</p>
-      )}
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-          <CalendarDays className="size-3.5" />
-          {post.date.slice(0, 10)}
-        </span>
-        {post.tags.map((t) => (
-          <Badge key={t} variant="outline">
-            {t}
-          </Badge>
-        ))}
-      </div>
-      <Separator className="my-6" />
-      <PostBody blocks={post.blocks} />
-    </article>
+      <PostView post={post} prev={prev} next={next} />
+    </>
   )
 }

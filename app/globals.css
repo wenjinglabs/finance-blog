@@ -68,3 +68,51 @@ body {
   color: var(--foreground);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
 }
+
+/* 水合前语言遮罩：localStorage 记录为中文时由内联脚本挂上，LanguageProvider 水合后移除 */
+html.lang-pending body {
+  visibility: hidden;
+}
+
+/* 自定义滚动条：细、圆角、跟随主题（明暗模式自动切换） */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklch, var(--muted-foreground) 45%, transparent);
+  background-clip: content-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 页面切换过渡：淡入 + 轻微上移（尊重系统的减少动态偏好） */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: page-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

@@ -43,3 +43,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local clutter
+_deploy.log
+.next.bak-*
+.open-next.bak*
