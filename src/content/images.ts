@@ -149,16 +149,6 @@ export const postImages: Record<string, { after: number; img: ImgInput }[]> = {
       },
     },
   ],
-};
-
-/** 首页 hero 图（Apple Music 式氛围背景的取色来源）。 */
-export const homeHero = {
-  src: "/images/howl050.avif",
-  accent: "#0878b8",
-  alt: "Two figures on a sky walkway above the clouds in Howl's Moving Castle",
-  altZh: "哈尔的移动城堡里，两人在云端栈道远眺",
-  caption: "Notes on money, written with the horizon in view.",
-  captionZh: "带着地平线看钱的事。",
   "finance-lump-sum-vs-dca": [
     {
       after: 0,
@@ -185,4 +175,14 @@ export const homeHero = {
       },
     },
   ],
+};
+
+/** 首页 hero 图（Apple Music 式氛围背景的取色来源）。 */
+export const homeHero = {
+  src: "/images/howl050.avif",
+  accent: "#0878b8",
+  alt: "Two figures on a sky walkway above the clouds in Howl's Moving Castle",
+  altZh: "哈尔的移动城堡里，两人在云端栈道远眺",
+  caption: "Notes on money, written with the horizon in view.",
+  captionZh: "带着地平线看钱的事。",
 };
