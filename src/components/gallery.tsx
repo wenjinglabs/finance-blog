@@ -27,7 +27,7 @@ import BIG from "../data/big.json"
 import { cn } from "../lib/utils"
 
 const ORIGIN = "https://pics.ggaag.com"
-const PER = 30
+const PER = 48
 
 const FILMS: Record<string, string> = {
   nausicaa: "风之谷",
@@ -132,6 +132,10 @@ export default function Gallery() {
     setPage(1)
     setOpenIdx(null)
   }
+  function goPage(p: number) {
+    setPage(p)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   useEffect(() => {
     if (openIdx === null) return
@@ -203,7 +207,7 @@ export default function Gallery() {
         )}
 
         <div className="mt-4">
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:gap-3 lg:grid-cols-5 xl:grid-cols-6">
             {items.map((k, i) => {
               const idx = keys.indexOf(k)
               return (
@@ -218,35 +222,42 @@ export default function Gallery() {
             })}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-1">
-            <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur <= 1} onClick={() => setPage(1)}>
-              <ChevronsLeft />
-            </Button>
-            <Button variant="outline" size="icon" disabled={cur <= 1} onClick={() => setPage(cur - 1)}>
-              <ChevronLeft />
-            </Button>
+          {/* 固定底部分页条的占位，避免最后一行被遮住 */}
+          <div className="h-24" />
+        </div>
+      </Tabs>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-4xl items-center justify-center gap-1 px-4 py-2.5">
+          <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur <= 1} onClick={() => goPage(1)}>
+            <ChevronsLeft />
+          </Button>
+          <Button variant="outline" size="icon" disabled={cur <= 1} onClick={() => goPage(cur - 1)}>
+            <ChevronLeft />
+          </Button>
+          <div className="hidden items-center gap-1 sm:flex">
             {pageWindow(cur, n).map((p) => (
               <Button
                 key={p}
                 variant={p === cur ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setPage(p)}
+                onClick={() => goPage(p)}
               >
                 {p}
               </Button>
             ))}
-            <Button variant="outline" size="icon" disabled={cur >= n} onClick={() => setPage(cur + 1)}>
-              <ChevronRight />
-            </Button>
-            <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur >= n} onClick={() => setPage(n)}>
-              <ChevronsRight />
-            </Button>
           </div>
-          <p className="mt-2 text-center text-xs text-muted-foreground">
+          <span className="min-w-16 text-center text-sm tabular-nums text-muted-foreground sm:hidden">
             {cur} / {n}
-          </p>
+          </span>
+          <Button variant="outline" size="icon" disabled={cur >= n} onClick={() => goPage(cur + 1)}>
+            <ChevronRight />
+          </Button>
+          <Button variant="outline" size="icon" className="hidden sm:inline-flex" disabled={cur >= n} onClick={() => goPage(n)}>
+            <ChevronsRight />
+          </Button>
         </div>
-      </Tabs>
+      </div>
 
       <Dialog open={openIdx !== null} onOpenChange={(o) => !o && setOpenIdx(null)}>
         <DialogContent className="flex flex-col items-center gap-2 sm:max-w-[min(90vw,640px)] p-4">
