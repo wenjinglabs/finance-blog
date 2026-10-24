@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { CalendarDays, Clock } from "lucide-react"
 import type { PostMeta } from "@/lib/posts"
 import type { Post } from "@/content"
@@ -25,6 +25,37 @@ export function PostList({ posts }: { posts: ListPost[] }) {
   const { lang } = useLang()
   const [activeTag, setActiveTag] = useState<string | null>(null)
 
+  // 返回主页时恢复上次的滚动位置和筛选状态
+  useEffect(() => {
+    try {
+      const savedTag = sessionStorage.getItem("home-tag")
+      if (savedTag) setActiveTag(savedTag === "all" ? null : savedTag)
+      const savedY = parseInt(sessionStorage.getItem("home-scroll") ?? "0", 10)
+      if (savedY > 0) {
+        // 图片加载/框架滚动处理会干扰一次性恢复,短周期重试直到到位;
+        // 用户主动滚动(滚轮/触摸)则立即让位
+        let tries = 0
+        let t: ReturnType<typeof setInterval> | null = null
+        const cancel = () => { if (t) clearInterval(t) }
+        window.addEventListener("wheel", cancel, { once: true, passive: true })
+        window.addEventListener("touchmove", cancel, { once: true, passive: true })
+        window.addEventListener("keydown", cancel, { once: true })
+        t = setInterval(() => {
+          window.scrollTo({ top: savedY, behavior: "instant" })
+          if (Math.abs(window.scrollY - savedY) < 2 || ++tries > 12) cancel()
+        }, 70)
+      }
+    } catch {}
+    const onScroll = () => {
+      try {
+        sessionStorage.setItem("home-scroll", String(window.scrollY))
+        sessionStorage.setItem("home-tag", activeTag ?? "all")
+      } catch {}
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   const tags = useMemo(() => {
     const set = new Map<string, number>()
     for (const p of posts) {
@@ -33,6 +64,12 @@ export function PostList({ posts }: { posts: ListPost[] }) {
     }
     return [...set.entries()].sort((a, b) => b[1] - a[1])
   }, [posts, lang])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("home-tag", activeTag ?? "all")
+    } catch {}
+  }, [activeTag])
 
   const visible = useMemo(() => {
     if (!activeTag) return posts
