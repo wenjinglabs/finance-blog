@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 
 /**
@@ -19,7 +19,14 @@ export function ArticleImage({
   accent?: string
 }) {
   const [loaded, setLoaded] = useState(false)
+  const ref = useRef<HTMLImageElement | null>(null)
   const tone = accent ?? "var(--muted-foreground)"
+
+  // 缓存命中时图片在水合前已加载完毕，onLoad 不会再触发——补一个 complete 检查
+  useEffect(() => {
+    const el = ref.current
+    if (el && el.complete && el.naturalWidth > 0) setLoaded(true)
+  }, [])
 
   return (
     <div
@@ -43,11 +50,13 @@ export function ArticleImage({
         <source srcSet={src} type="image/avif" />
         <source srcSet={src.replace(/\.avif$/, ".webp")} type="image/webp" />
         <img
+          ref={ref}
           src={src.replace(/\.avif$/, ".webp")}
           alt={alt}
           loading="lazy"
           decoding="async"
           onLoad={() => setLoaded(true)}
+          onError={() => setLoaded(true)}
           className={cn(
             "relative w-full transition-[opacity,filter,transform] duration-700 ease-out",
             loaded ? "scale-100 opacity-100 blur-0" : "scale-[1.02] opacity-0 blur-md"

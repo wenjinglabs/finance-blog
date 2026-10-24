@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Practical notes on personal finance: cash flow tracking, emergency funds, index fund investing, asset allocation, and spotting scams. Written from real experience, with the math shown.",
   alternates: { canonical: "/" },
+  verification: { google: "1-X-DrfXE3bRsRBqD-_JCCkkjHSkgw_lDImvjK216H0" },
   openGraph: {
     title: "GGAAG Finance Notes",
     description:
