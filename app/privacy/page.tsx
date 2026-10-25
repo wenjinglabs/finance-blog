@@ -4,7 +4,7 @@ import { PrivacyContent } from "@/components/static-pages"
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How this site handles cookies, Google Analytics, and Google AdSense data.",
-  alternates: { canonical: "/privacy", languages: { en: "https://blog.ggaag.com/privacy", zh: "https://blog.ggaag.com/zh/privacy", "x-default": "https://blog.ggaag.com/privacy" } },
+  alternates: { canonical: "/privacy" },
 }
 
 export default function PrivacyPage() {
