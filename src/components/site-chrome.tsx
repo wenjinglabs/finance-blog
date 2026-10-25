@@ -9,9 +9,18 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="flex h-14 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="font-mono text-base font-semibold tracking-[0.18em]">
+        <a
+          href="/"
+          onClick={(e) => {
+            if (document.referrer && new URL(document.referrer).origin === window.location.origin && window.location.pathname !== "/") {
+              e.preventDefault()
+              history.back()
+            }
+          }}
+          className="font-mono text-base font-semibold tracking-[0.18em]"
+        >
           GGAAG
-        </Link>
+        </a>
         <nav className="flex items-center gap-1">
           <Link href="/" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             <Home className="size-4" />

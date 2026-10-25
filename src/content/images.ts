@@ -162,6 +162,19 @@ export const postImages: Record<string, { after: number; img: ImgInput }[]> = {
       },
     },
   ],
+  "finance-cash-rates": [
+    {
+      after: 0,
+      img: {
+        src: "/images/chihiro050.avif",
+        accent: "#4a6848",
+        alt: "Chihiro standing in a quiet forest, deciding which path to take",
+        altZh: "千寻站在安静的森林里决定走哪条路",
+        caption: "Cash needs a home too. Pick one on purpose.",
+        captionZh: "现金也需要一个家，而且是主动选的那个。",
+      },
+    },
+  ],
   "finance-lump-sum-vs-dca": [
     {
       after: 0,

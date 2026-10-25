@@ -26,6 +26,7 @@ const KEYS = [
   "howl050",
   "laputa030",
   "kimitachi010",
+  "chihiro050",
 ];
 
 const ORIGIN = "https://pics.ggaag.com";

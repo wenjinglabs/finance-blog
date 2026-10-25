@@ -97,10 +97,21 @@ export function PostView({
         </div>
       )}
       {tocItems.length >= 2 && <Toc items={tocItems} />}
-      <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-6 -ml-3")}>
+      <button
+        type="button"
+        onClick={() => {
+          // 站内有来路就用浏览器返回（保留滚动/历史），否则落回首页
+          if (typeof document !== "undefined" && document.referrer && new URL(document.referrer).origin === window.location.origin) {
+            history.back()
+          } else {
+            window.location.href = "/"
+          }
+        }}
+        className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-6 -ml-3")}
+      >
         <ArrowLeft />
-        {lang === "zh" ? "返回首页" : "Back"}
-      </Link>
+        Back
+      </button>
       <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{localized.title}</h1>
       {localized.description && (
         <p className="mt-3 text-lg text-muted-foreground">{localized.description}</p>
