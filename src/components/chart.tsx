@@ -33,42 +33,57 @@ export function ChartSVG({ chart }: { chart: ChartDef }) {
   const hi = "#3b82f6";
 
   if (chart.type === "hbar") {
-    const rowH = (H - PAD.t - PAD.b) / chart.labels.length;
-    const barMaxW = W - PAD.l - PAD.r - 150;
+    const rowH = 46;
+    const H = rowH * chart.labels.length + 44;
+    const labelW = 170;          // 左侧标签列
+    const valueW = 76;           // 右侧数值预留
+    const barX = labelW + 12;
+    const barMaxW = W - barX - valueW;
+    const fmt = (v: number) => v.toLocaleString("en-US");
+    const unitStr = chart.unit ?? "";
+    const prefix = unitStr === "$" ? "$" : "";
+
     return (
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={chart.title} className="w-full">
-        <text x={PAD.l} y={22} fontSize={14} fontWeight={600} fill={accent}>
-          {chart.title}
-        </text>
+        {chart.title && (
+          <text x={4} y={20} fontSize={13} fontWeight={600} fill={accent}>
+            {chart.title}
+          </text>
+        )}
+        {/* 基线网格 */}
+        <line x1={barX} y1={30} x2={barX + barMaxW} y2={30} stroke={dim} strokeOpacity={0.25} strokeWidth={1} />
         {chart.labels.map((label, i) => {
-          const w = (Math.abs(chart.values[i]) / max) * barMaxW;
-          const y = PAD.t + i * rowH;
-          const color = chart.highlight === i ? hi : accent;
+          const v = chart.values[i];
+          const w = Math.max((Math.abs(v) / max) * barMaxW, 4);
+          const y = 44 + i * rowH;
+          const isHi = chart.highlight === i;
+          const inside = w > 58; // 条够宽时数值放条内
           return (
             <g key={label}>
-              <text x={PAD.l} y={y + rowH / 2} fontSize={12} fill={dim} dominantBaseline="middle">
+              <text x={labelW} y={y + 22} fontSize={13} fill={dim} textAnchor="end" dominantBaseline="middle">
                 {label}
               </text>
               <rect
-                x={PAD.l + 110}
-                y={y + rowH * 0.18}
+                x={barX}
+                y={y}
                 width={w}
-                height={rowH * 0.64}
-                rx={4}
-                fill={color}
-                opacity={chart.highlight === i ? 0.95 : 0.55}
+                height={28}
+                rx={5}
+                fill={isHi ? hi : accent}
+                opacity={isHi ? 0.95 : 0.4}
               />
               <text
-                x={Math.min(PAD.l + 118 + w + 6, W - PAD.r - 4)}
-                y={y + rowH / 2}
-                fontSize={12}
-                fill={accent}
+                x={inside ? barX + w - 10 : barX + w + 10}
+                y={y + 14}
+                fontSize={12.5}
+                fontWeight={isHi ? 700 : 600}
+                fill={inside ? "var(--background)" : accent}
                 dominantBaseline="middle"
-                textAnchor="end"
-                fontWeight={chart.highlight === i ? 600 : 400}
+                textAnchor={inside ? "end" : "start"}
               >
-                {chart.values[i]}
-                {chart.unit ?? ""}
+                {prefix}
+                {fmt(v)}
+                {prefix ? "" : unitStr}
               </text>
             </g>
           );
