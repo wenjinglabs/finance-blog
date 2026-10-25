@@ -16,14 +16,28 @@ const NAV_ITEMS = [
 /** 顶部导航：吸顶毛玻璃，双语标签；语言切换跳转对应语言页面。 */
 export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; pathname?: string }) {
   const { lang: hookLang } = useLang()
-  const lang = langProp ?? hookLang
+  const [locLang, setLocLang] = useState<"en" | "zh" | null>(null)
+  const [locPath, setLocPath] = useState<string | null>(null)
+  useEffect(() => {
+    const detect = () => {
+      setLocPath(window.location.pathname)
+      setLocLang(window.location.pathname.startsWith("/zh") ? "zh" : "en")
+    }
+    detect()
+    // 软导航后 pathname prop 可能缺,轮询一次兜底
+    const t = setInterval(detect, 400)
+    setTimeout(() => clearInterval(t), 2000)
+    return () => clearInterval(t)
+  }, [pathname])
+  const lang = langProp ?? locLang ?? hookLang
+  const effPath = pathname ?? locPath ?? "/"
   const homeHref = lang === "zh" ? "/zh" : "/"
   const archivesHref = lang === "zh" ? "/zh/archives" : "/archives"
   const picsHref = lang === "zh" ? "/zh/pics" : "/pics"
   const aboutHref = lang === "zh" ? "/zh/about" : "/about"
   const [toggleHref, setToggleHref] = useState("/")
   useEffect(() => {
-    const m = (pathname ?? window.location.pathname).match("^(?:/zh)?(/.*)?$")
+    const m = (effPath).match("^(?:/zh)?(/.*)?$")
     const rest = m?.[1] ?? "/"
     setToggleHref(lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest))
   }, [pathname, lang])
@@ -66,7 +80,15 @@ export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; path
 
 export function FooterText({ lang: langProp }: { lang?: "en" | "zh" }) {
   const { lang: hookLang } = useLang()
-  const lang = langProp ?? hookLang
+  const [locLang, setLocLang] = useState<"en" | "zh" | null>(null)
+  useEffect(() => {
+    const detect = () => setLocLang(window.location.pathname.startsWith("/zh") ? "zh" : "en")
+    detect()
+    const t = setInterval(detect, 400)
+    setTimeout(() => clearInterval(t), 2000)
+    return () => clearInterval(t)
+  }, [])
+  const lang = langProp ?? locLang ?? hookLang
   return (
     <>
       <p className="text-xs text-muted-foreground">

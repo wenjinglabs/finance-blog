@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
 import type { Metadata } from "next"
 import { LanguageProvider } from "@/lib/language"
-import { SiteNav, FooterText, FooterSeparator } from "@/components/site-chrome"
 import { StripRsc } from "@/components/strip-rsc"
 import { GoogleAnalytics } from "@/components/google-analytics"
 import { AdSenseLoader } from "@/components/ad-slot"
@@ -31,12 +30,7 @@ export default function ZhLayout({ children }: { children: ReactNode }) {
         <StripRsc />
         <GoogleAnalytics />
         <AdSenseLoader />
-        <SiteNav lang="zh" />
-        <main className="w-full px-4 sm:px-6 lg:px-8 py-10">{children}</main>
-        <footer className="w-full px-4 sm:px-6 lg:px-8 pb-10">
-          <FooterSeparator />
-          <FooterText lang="zh" />
-        </footer>
+        <div className="w-full">{children}</div>
         <BackToTop />
       </div>
     </LanguageProvider>
