@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Archive, BookOpen, Home, Images, Languages } from "lucide-react"
+import { useEffect, useState } from "react"
 import { useLang } from "@/lib/language"
 import { Separator } from "@/components/ui/separator"
 
@@ -20,9 +21,12 @@ export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; path
   const archivesHref = lang === "zh" ? "/zh/archives" : "/archives"
   const picsHref = lang === "zh" ? "/zh/pics" : "/pics"
   const aboutHref = lang === "zh" ? "/zh/about" : "/about"
-  const m = (pathname ?? "/").match("^(?:/zh)?(/.*)?$")
-  const rest = m?.[1] ?? "/"
-  const toggleHref = lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest)
+  const [toggleHref, setToggleHref] = useState("/")
+  useEffect(() => {
+    const m = (pathname ?? window.location.pathname).match("^(?:/zh)?(/.*)?$")
+    const rest = m?.[1] ?? "/"
+    setToggleHref(lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest))
+  }, [pathname, lang])
   const toggleLabel = lang === "zh" ? "EN" : "中文"
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
