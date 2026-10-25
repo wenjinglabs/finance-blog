@@ -21,8 +21,9 @@ import { ArticleImage } from "@/components/article-image"
 
 type ListPost = PostMeta
 
-export function PostList({ posts }: { posts: ListPost[] }) {
-  const { lang } = useLang()
+export function PostList({ posts, lang: langProp }: { posts: ListPost[]; lang?: "en" | "zh" }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   const [activeTag, setActiveTag] = useState<string | null>(null)
 
   // 返回主页时恢复上次的滚动位置和筛选状态

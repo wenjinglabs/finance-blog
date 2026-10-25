@@ -13,7 +13,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${post.title} | GGAAG Finance Notes`,
     description: post.description,
-    alternates: { canonical: `/posts/${post.slug}` },
+    alternates: {
+      canonical: `/posts/${post.slug}`,
+      ...(post.zh
+        ? {
+            languages: {
+              en: `https://blog.ggaag.com/posts/${post.slug}`,
+              zh: `https://blog.ggaag.com/zh/posts/${post.slug}`,
+              "x-default": `https://blog.ggaag.com/posts/${post.slug}`,
+            },
+          }
+        : {}),
+    },
     openGraph: {
       title: post.title,
       description: post.description,

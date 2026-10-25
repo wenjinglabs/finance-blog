@@ -6,58 +6,72 @@ import { useLang } from "@/lib/language"
 import { Separator } from "@/components/ui/separator"
 
 const NAV_ITEMS = [
-  { href: "/", icon: Home, en: "Home", zh: "首页" },
-  { href: "/archives", icon: Archive, en: "Archives", zh: "归档" },
-  { href: "/pics", icon: Images, en: "Gallery", zh: "相簿" },
-  { href: "/about", icon: BookOpen, en: "About", zh: "关于" },
+  { key: "home", icon: Home, en: "Home", zh: "首页" },
+  { key: "archives", icon: Archive, en: "Archives", zh: "归档" },
+  { key: "pics", icon: Images, en: "Gallery", zh: "相簿" },
+  { key: "about", icon: BookOpen, en: "About", zh: "关于" },
 ] as const
 
-/** 顶部导航：双语标签 + 语言切换，整体为客户端组件以响应语言状态。 */
-export function SiteNav() {
-  const { lang, setLang } = useLang()
+/** 顶部导航：吸顶毛玻璃，双语标签；语言切换跳转对应语言页面。 */
+export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; pathname?: string }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
+  const homeHref = lang === "zh" ? "/zh" : "/"
+  const archivesHref = lang === "zh" ? "/zh/archives" : "/archives"
+  const picsHref = lang === "zh" ? "/zh/pics" : "/pics"
+  const aboutHref = lang === "zh" ? "/zh/about" : "/about"
+  const m = (pathname ?? "/").match("^(?:/zh)?(/.*)?$")
+  const rest = m?.[1] ?? "/"
+  const toggleHref = lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest)
+  const toggleLabel = lang === "zh" ? "EN" : "中文"
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="flex h-14 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="font-mono text-base font-semibold tracking-[0.18em]">
+        <Link href={homeHref} className="font-mono text-base font-semibold tracking-[0.18em]">
           GGAAG
         </Link>
         <nav className="flex items-center gap-1">
-          {NAV_ITEMS.map(({ href, icon: Icon, en, zh }) => (
+          {NAV_ITEMS.map(({ key, icon: Icon, en, zh }) => (
             <Link
-              key={href}
-              href={href}
+              key={key}
+              href={key === "home" ? homeHref : key === "archives" ? archivesHref : key === "pics" ? picsHref : aboutHref}
               className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3"
             >
               <Icon className="size-4" />
               <span className="hidden sm:inline">{lang === "zh" ? zh : en}</span>
             </Link>
           ))}
-          <button
-            type="button"
-            onClick={() => setLang(lang === "en" ? "zh" : "en")}
+          <Link
+            href={toggleHref}
             aria-label="Switch language"
+            onClick={() => {
+              try {
+                window.localStorage.setItem("lang", lang === "zh" ? "en" : "zh")
+              } catch {}
+            }}
             className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3"
           >
             <Languages className="size-4" />
-            {lang === "en" ? "中文" : "EN"}
-          </button>
+            {toggleLabel}
+          </Link>
         </nav>
       </div>
     </header>
   )
 }
 
-export function FooterText() {
-  const { lang } = useLang()
+export function FooterText({ lang: langProp }: { lang?: "en" | "zh" }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   return (
     <>
       <p className="text-xs text-muted-foreground">
         {lang === "zh" ? "GGAAG 财经笔记" : "GGAAG Finance Notes"} ·{" "}
-        <Link href="/about" className="underline underline-offset-4">
+        <Link href={lang === "zh" ? "/zh/about" : "/about"} className="underline underline-offset-4">
           {lang === "zh" ? "关于" : "About"}
         </Link>{" "}
         ·{" "}
-        <Link href="/privacy" className="underline underline-offset-4">
+        <Link href={lang === "zh" ? "/zh/privacy" : "/privacy"} className="underline underline-offset-4">
           {lang === "zh" ? "隐私政策" : "Privacy Policy"}
         </Link>{" "}
         ·{" "}

@@ -32,12 +32,15 @@ export function PostView({
   post,
   prev,
   next,
+  lang: langProp,
 }: {
   post: Post
   prev?: NavPost
   next?: NavPost
+  lang?: "en" | "zh"
 }) {
-  const { lang } = useLang()
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   const localized = lang === "zh" && post.zh ? { ...post, ...post.zh } : post
 
   const images = postImages[post.slug] ?? []

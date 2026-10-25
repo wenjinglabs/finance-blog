@@ -6,8 +6,9 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   return <div className="space-y-4 leading-7 text-muted-foreground [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-foreground">{children}</div>
 }
 
-export function AboutContent() {
-  const { lang } = useLang()
+export function AboutContent({ lang: langProp }: { lang?: "en" | "zh" }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   if (lang === "zh") {
     return (
       <Wrapper>
@@ -77,8 +78,9 @@ export function AboutContent() {
   )
 }
 
-export function PrivacyContent() {
-  const { lang } = useLang()
+export function PrivacyContent({ lang: langProp }: { lang?: "en" | "zh" }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   if (lang === "zh") {
     return (
       <Wrapper>

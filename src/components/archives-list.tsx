@@ -8,8 +8,9 @@ import type { Post } from "@/content"
 
 type ListPost = PostMeta
 
-export function ArchivesList({ posts }: { posts: ListPost[] }) {
-  const { lang } = useLang()
+export function ArchivesList({ posts, lang: langProp }: { posts: ListPost[]; lang?: "en" | "zh" }) {
+  const { lang: hookLang } = useLang()
+  const lang = langProp ?? hookLang
   const byYear = new Map<string, ListPost[]>()
   for (const p of posts) {
     const y = p.date.slice(0, 4)
