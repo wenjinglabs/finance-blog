@@ -5,6 +5,7 @@ import { GoogleAnalytics } from "@/components/google-analytics"
 import { AdSenseLoader } from "@/components/ad-slot"
 import { SiteNav, FooterText, FooterSeparator } from "@/components/site-chrome"
 import { BackToTop } from "@/components/back-to-top"
+import Script from "next/script"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
  * esbuild/Turbopack keepNames 的内联脚本（next-themes 主题引导）会调用 __name，
  * 但打包器没把辅助函数带上——在此补一个全局 shim，避免 ReferenceError。
  */
-const LANG_PREPAINT =
+const NAME_SHIM =
   `window.__name=window.__name||function(f,n){try{Object.defineProperty(f,"name",{value:n,configurable:true})}catch(e){}return f};`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

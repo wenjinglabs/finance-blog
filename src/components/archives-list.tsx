@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import type { PostMeta } from "@/lib/posts"
 import { useLang } from "@/lib/language"
 import { Separator } from "@/components/ui/separator"
@@ -29,7 +28,7 @@ export function ArchivesList({ posts, lang: langProp }: { posts: ListPost[]; lan
           <h2 className="mb-3 text-sm font-semibold text-muted-foreground">{y}</h2>
           <div className="flex flex-col">
             {ps.map((p) => (
-              <Link
+              <a
                 key={p.slug}
                 href={`/posts/${p.slug}`}
                 className="flex items-baseline gap-4 rounded-md px-2 py-2 hover:bg-muted"
@@ -40,7 +39,7 @@ export function ArchivesList({ posts, lang: langProp }: { posts: ListPost[]; lan
                 <span className="text-sm underline-offset-4 hover:underline">
                   {lang === "zh" && p.zh ? p.zh.title : p.title}
                 </span>
-              </Link>
+              </a>
             ))}
           </div>
           {yi < years.length - 1 && <Separator className="mt-8" />}

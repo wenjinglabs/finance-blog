@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { CalendarDays, Clock } from "lucide-react"
 import type { PostMeta } from "@/lib/posts"
@@ -148,7 +147,7 @@ export function PostList({ posts, lang: langProp }: { posts: ListPost[]; lang?: 
           const minutes = readingMinutes(p, lang)
           const cover = postImages[p.slug]?.[0]?.img
           return (
-            <Link key={p.slug} href={`/posts/${p.slug}`} className="group">
+            <a key={p.slug} href={`/posts/${p.slug}`} className="group">
               <Card className="h-full overflow-hidden pt-0 transition-colors group-hover:border-foreground/20">
                 {cover && (
                   <div
@@ -184,7 +183,7 @@ export function PostList({ posts, lang: langProp }: { posts: ListPost[]; lang?: 
                   ))}
                 </CardFooter>
               </Card>
-            </Link>
+            </a>
           )
         })}
       </div>

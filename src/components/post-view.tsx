@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, CalendarDays, ChevronLeft, ChevronRight, Clock } from "lucide-react"
 import type { Post } from "@/content"
@@ -121,9 +120,9 @@ export function PostView({
           <CalendarDays className="size-3.5" />
           {post.date.slice(0, 10)}
         </span>
-        <Link href="/about" className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+        <a href="/about" className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
           GGAAG
-        </Link>
+        </a>
         <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
           <Clock className="size-3.5" />
           {lang === "zh" ? `${readingMinutes(post, lang)} 分钟阅读` : `${readingMinutes(post, lang)} min read`}
@@ -163,7 +162,7 @@ export function PostView({
           </h2>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
             {related.map((p) => (
-              <Link key={p.slug} href={`/posts/${p.slug}`} className="group">
+              <a key={p.slug} href={`/posts/${p.slug}`} className="group">
                 <Card className="h-full p-3 transition-colors group-hover:border-foreground/20">
                   <p className="text-sm font-medium leading-5">
                     {lang === "zh" ? p.zh?.title ?? p.title : p.title}
@@ -172,7 +171,7 @@ export function PostView({
                     {lang === "zh" ? `${readingMinutes(p, lang)} 分钟` : `${readingMinutes(p, lang)} min`}
                   </p>
                 </Card>
-              </Link>
+              </a>
             ))}
           </div>
         </section>
@@ -180,7 +179,7 @@ export function PostView({
       {(prev || next) && (
         <nav aria-label={lang === "zh" ? "文章导航" : "Post navigation"} className="mt-10 grid gap-3 sm:grid-cols-2">
           {prev ? (
-            <Link href={`/posts/${prev.slug}`} className="group">
+            <a href={`/posts/${prev.slug}`} className="group">
               <Card className="h-full p-4 transition-colors group-hover:border-foreground/20">
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
                   <ChevronLeft className="size-3.5" />
@@ -190,12 +189,12 @@ export function PostView({
                   {lang === "zh" ? prev.zhTitle ?? prev.title : prev.title}
                 </CardTitle>
               </Card>
-            </Link>
+            </a>
           ) : (
             <span aria-hidden className="hidden sm:block" />
           )}
           {next && (
-            <Link href={`/posts/${next.slug}`} className="group sm:text-right">
+            <a href={`/posts/${next.slug}`} className="group sm:text-right">
               <Card className="h-full p-4 transition-colors group-hover:border-foreground/20">
                 <p className="flex items-center gap-1 text-xs text-muted-foreground sm:justify-end">
                   {lang === "zh" ? "下一篇" : "Next"}
@@ -205,7 +204,7 @@ export function PostView({
                   {lang === "zh" ? next.zhTitle ?? next.title : next.title}
                 </CardTitle>
               </Card>
-            </Link>
+            </a>
           )}
         </nav>
       )}

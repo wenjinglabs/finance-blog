@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Archive, BookOpen, Home, Images } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 
@@ -22,22 +21,22 @@ export function SiteNav() {
           GGAAG
         </a>
         <nav className="flex items-center gap-1">
-          <Link href="/" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
+          <a href="/" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             <Home className="size-4" />
             <span className="hidden sm:inline">Home</span>
-          </Link>
-          <Link href="/archives" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
+          </a>
+          <a href="/archives" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             <Archive className="size-4" />
             <span className="hidden sm:inline">Archives</span>
-          </Link>
-          <Link href="/pics" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
+          </a>
+          <a href="/pics" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             <Images className="size-4" />
             <span className="hidden sm:inline">Gallery</span>
-          </Link>
-          <Link href="/about" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
+          </a>
+          <a href="/about" className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3">
             <BookOpen className="size-4" />
             <span className="hidden sm:inline">About</span>
-          </Link>
+          </a>
         </nav>
       </div>
     </header>
@@ -49,8 +48,8 @@ export function FooterText() {
     <>
       <p className="text-xs text-muted-foreground">
         GGAAG Finance Notes ·{" "}
-        <Link href="/about" className="underline underline-offset-4">About</Link> ·{" "}
-        <Link href="/privacy" className="underline underline-offset-4">Privacy Policy</Link> ·{" "}
+        <a href="/about" className="underline underline-offset-4">About</a> ·{" "}
+        <a href="/privacy" className="underline underline-offset-4">Privacy Policy</a> ·{" "}
         <a href="https://ggaag.com" className="underline underline-offset-4">Tools</a>
       </p>
       <p className="mt-2 text-xs text-muted-foreground/70">
