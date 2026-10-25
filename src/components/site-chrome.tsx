@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Archive, BookOpen, Home, Images, Languages } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { useLang } from "@/lib/language"
 import { Separator } from "@/components/ui/separator"
 
@@ -16,31 +17,22 @@ const NAV_ITEMS = [
 /** 顶部导航：吸顶毛玻璃，双语标签；语言切换跳转对应语言页面。 */
 export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; pathname?: string }) {
   const { lang: hookLang } = useLang()
-  const [locLang, setLocLang] = useState<"en" | "zh" | null>(null)
-  const [locPath, setLocPath] = useState<string | null>(null)
-  useEffect(() => {
-    const detect = () => {
-      setLocPath(window.location.pathname)
-      setLocLang(window.location.pathname.startsWith("/zh") ? "zh" : "en")
-    }
-    detect()
-    // 软导航后 pathname prop 可能缺,轮询一次兜底
-    const t = setInterval(detect, 400)
-    setTimeout(() => clearInterval(t), 2000)
-    return () => clearInterval(t)
-  }, [pathname])
-  const lang = langProp ?? locLang ?? hookLang
-  const effPath = pathname ?? locPath ?? "/"
+  const router = useRouter()
+  const routePath = usePathname()  // 软导航时自动更新
+  const lang = langProp ?? (routePath?.startsWith("/zh") ? "zh" : "en")
   const homeHref = lang === "zh" ? "/zh" : "/"
   const archivesHref = lang === "zh" ? "/zh/archives" : "/archives"
   const picsHref = lang === "zh" ? "/zh/pics" : "/pics"
   const aboutHref = lang === "zh" ? "/zh/about" : "/about"
-  const [toggleHref, setToggleHref] = useState("/")
-  useEffect(() => {
-    const m = (effPath).match("^(?:/zh)?(/.*)?$")
-    const rest = m?.[1] ?? "/"
-    setToggleHref(lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest))
-  }, [pathname, lang])
+  // 点击那一刻才读取当前地址,避免 SSR/水合时序导致 href 过期
+  const toggleLang = () => {
+    const rest = window.location.pathname.replace(/^\/zh/, "") || "/"
+    const target = lang === "zh" ? rest : "/zh" + (rest === "/" ? "" : rest)
+    try {
+      window.localStorage.setItem("lang", lang === "zh" ? "en" : "zh")
+    } catch {}
+    router.push(target)
+  }
   const toggleLabel = lang === "zh" ? "EN" : "中文"
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -59,19 +51,15 @@ export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; path
               <span className="hidden sm:inline">{lang === "zh" ? zh : en}</span>
             </Link>
           ))}
-          <Link
-            href={toggleHref}
+          <button
+            type="button"
             aria-label="Switch language"
-            onClick={() => {
-              try {
-                window.localStorage.setItem("lang", lang === "zh" ? "en" : "zh")
-              } catch {}
-            }}
+            onClick={toggleLang}
             className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm hover:bg-muted sm:px-3"
           >
             <Languages className="size-4" />
             {toggleLabel}
-          </Link>
+          </button>
         </nav>
       </div>
     </header>
@@ -79,16 +67,8 @@ export function SiteNav({ lang: langProp, pathname }: { lang?: "en" | "zh"; path
 }
 
 export function FooterText({ lang: langProp }: { lang?: "en" | "zh" }) {
-  const { lang: hookLang } = useLang()
-  const [locLang, setLocLang] = useState<"en" | "zh" | null>(null)
-  useEffect(() => {
-    const detect = () => setLocLang(window.location.pathname.startsWith("/zh") ? "zh" : "en")
-    detect()
-    const t = setInterval(detect, 400)
-    setTimeout(() => clearInterval(t), 2000)
-    return () => clearInterval(t)
-  }, [])
-  const lang = langProp ?? locLang ?? hookLang
+  const routePath = usePathname()
+  const lang = langProp ?? (routePath?.startsWith("/zh") ? "zh" : "en")
   return (
     <>
       <p className="text-xs text-muted-foreground">
