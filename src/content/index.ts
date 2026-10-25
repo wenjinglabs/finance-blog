@@ -11,12 +11,14 @@ import { financeNasdaqDrawdown } from "./finance-nasdaq-drawdown";
 import { financeRentVsBuy } from "./finance-rent-vs-buy";
 import { financeLumpSumVsDca } from "./finance-lump-sum-vs-dca";
 import { financeBudgetMethods } from "./finance-budget-methods";
+import { financeGradJobs } from "./finance-grad-jobs";
 
 export type { Post, Block } from "./types";
 
 // Legacy Chinese tech notes are kept in this folder but excluded from the
 // public feed; re-add imports here if they ever need to come back.
 const all: Post[] = [
+  financeGradJobs,
   financeBudgetMethods,
   financeLumpSumVsDca,
   financeRentVsBuy,

@@ -16,6 +16,7 @@ Language: en (primary), zh (client-side toggle, same URLs)
 - [Avalanche vs Snowball](https://blog.ggaag.com/posts/finance-debt-order): Same $600/month budget simulated on the same three debts — $923 and 2 months apart, first payoff 4 months earlier with snowball.
 - [Investment Scams](https://blog.ggaag.com/posts/finance-scam): Three structures every pitch reduces to, plus a one-question test.
 - [Nasdaq Drawdowns in Numbers](https://blog.ggaag.com/posts/finance-nasdaq-drawdown): Every major Nasdaq decline since 2000 — depth and time-to-recovery — and the three moves with math behind them.
+- [The Grad Job Market Broke in 2026](https://blog.ggaag.com/posts/finance-grad-jobs): Recent grads now out-unemploy the overall workforce (5.7% vs 4.4%, widest gap on record) — the three structural forces behind it and five moves that still work.
 - [50/30/20 vs Zero-Based Budgeting](https://blog.ggaag.com/posts/finance-budget-methods): Where each method breaks, and the savings-rate ladder (each 5 points = ~$500k over 30 years) that matters more than the method.
 - [Lump Sum vs Dollar-Cost Averaging](https://blog.ggaag.com/posts/finance-lump-sum-vs-dca): 155 years of S&P 500 data, every starting month — lump sum wins 77% since 1950; DCA-12 costs ~5% expected; 3-month schedules cost under 1%.
 - [Rent vs Buy: The Break-Even Math](https://blog.ggaag.com/posts/finance-rent-vs-buy): Full model of a $400k home vs renting and investing the difference; buying wins when appreciation beats investment return by ~2.6%/yr.

@@ -15,4 +15,5 @@ export const postRelated: Record<string, string[]> = {
   "finance-rent-vs-buy": ["finance-allocation", "finance-index-dca", "finance-compound"],
   "finance-lump-sum-vs-dca": ["finance-index-dca", "finance-compound", "finance-allocation"],
   "finance-budget-methods": ["finance-ledger", "finance-debt-order", "finance-start"],
+  "finance-grad-jobs": ["finance-emergency-fund", "finance-ledger", "finance-compound"],
 };

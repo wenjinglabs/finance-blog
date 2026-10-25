@@ -149,6 +149,19 @@ export const postImages: Record<string, { after: number; img: ImgInput }[]> = {
       },
     },
   ],
+  "finance-grad-jobs": [
+    {
+      after: 0,
+      img: {
+        src: "/images/kimitachi010.avif",
+        accent: "#5a7858",
+        alt: "Two people in serious conversation at a kitchen table",
+        altZh: "两人在厨房桌边严肃地商量事情",
+        caption: "The ladder changed. Read the new one before climbing.",
+        captionZh: "梯子换了，爬之前先看清新的。",
+      },
+    },
+  ],
   "finance-lump-sum-vs-dca": [
     {
       after: 0,
