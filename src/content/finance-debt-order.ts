@@ -33,6 +33,18 @@ export const financeDebtOrder: Post = {
       t: "p",
       text: "Total budget for all debt payments: **$600/month**. Minimums add up to $350, leaving $250/month of attack money — the only variable between the two strategies is the *order* it lands in.",
     },
+    {
+      t: "chart",
+      chart: {
+        type: "hbar",
+        title: "Total interest paid over the full payoff ($600/mo budget)",
+        labels: ["Avalanche", "Snowball"],
+        values: [4489, 5412],
+        unit: "$",
+        highlight: 1,
+      },
+    },
+
     { t: "h2", text: "The results, month by month" },
     {
       t: "table",
@@ -102,6 +114,18 @@ export const financeDebtOrder: Post = {
         t: "p",
         text: "每月总还款预算 **$600**。最低还款合计 $350，剩下每月 $250 是进攻资金——两种策略之间唯一的区别，只是这笔钱**落地的顺序**。",
       },
+      {
+        t: "chart",
+        chart: {
+          type: "hbar",
+          title: "整个还清周期内支付的总利息（每月 600 美元预算）",
+          labels: ["雪崩法", "雪球法"],
+          values: [4489, 5412],
+          unit: "$",
+          highlight: 1,
+        },
+      },
+
       { t: "h2", text: "结果，逐月模拟" },
       {
         t: "table",

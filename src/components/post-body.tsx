@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ArticleImage } from "@/components/article-image";
+import { ChartBlock } from "@/components/chart";
 import type { Block } from "@/content";
 
 function Inline({ text }: { text: string }) {
@@ -144,6 +145,9 @@ export function PostBody({ blocks, lang = "en" }: { blocks: Block[]; lang?: "en"
               </ul>
             </div>
           );
+        }
+        if (block.t === "chart") {
+          return <ChartBlock key={i} chart={block.chart} />;
         }
         if (block.t === "img") {
           const alt = lang === "zh" && block.altZh ? block.altZh : block.alt;

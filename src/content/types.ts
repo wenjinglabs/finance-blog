@@ -9,6 +9,17 @@ export type Block =
   | { t: "summary"; items: string[] }
   | { t: "table"; head: string[]; rows: string[][] }
   | {
+      t: "chart";
+      chart: {
+        type: "bar" | "hbar";
+        title: string;
+        labels: string[];
+        values: number[];
+        unit?: string;
+        highlight?: number;
+      };
+    }
+  | {
       t: "img";
       src: string;
       alt: string;

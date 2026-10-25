@@ -32,6 +32,18 @@ export const financeIndexDca: Post = {
       ],
     },
     {
+      t: "chart",
+      chart: {
+        type: "hbar",
+        title: "Final wealth after 40 years: $10k/yr at 7% gross",
+        labels: ["0.05% fee", "1.05% fee"],
+        values: [2000, 1550],
+        unit: "k$",
+        highlight: 1,
+      },
+    },
+
+    {
       t: "p",
       text: "That 1% annual difference consumes about **23% of your final wealth** over 40 years. Fees are one of the very few variables in investing you fully control, which is why they're the first thing to check on any fund, before anything else about it.",
     },
@@ -86,6 +98,18 @@ export const financeIndexDca: Post = {
           "费率 1.05%（典型主动管理基金）：约 **155 万**",
         ],
       },
+      {
+        t: "chart",
+        chart: {
+          type: "hbar",
+          title: "40 年后的最终财富：每年投 1 万、总回报 7%",
+          labels: ["费率 0.05%", "费率 1.05%"],
+          values: [2000, 1550],
+          unit: "k$",
+          highlight: 1,
+        },
+      },
+
       {
         t: "p",
         text: "每年 1% 的差异，40 年吃掉约 **23% 的最终财富**。费率是投资里极少数你完全可控的变量，所以看任何基金，第一件事看费率，其他都往后排。",

@@ -35,6 +35,18 @@ export const financeNasdaqDrawdown: Post = {
       ],
     },
     {
+      t: "chart",
+      chart: {
+        type: "hbar",
+        title: "Gain needed to recover a drawdown",
+        labels: ["-20%", "-30%", "-50%", "-78%"],
+        values: [25, 43, 100, 355],
+        unit: "%",
+        highlight: 3,
+      },
+    },
+
+    {
       t: "p",
       text: "This is why \"I'll sell now and buy back lower\" is harder than it sounds: you need the market to fall far enough to cover the recovery math *and* you need to actually pull the buy trigger, which feels worst exactly at the bottom.",
     },
@@ -109,6 +121,18 @@ export const financeNasdaqDrawdown: Post = {
           ["-78%（互联网泡沫）", "+355%"],
         ],
       },
+      {
+        t: "chart",
+        chart: {
+          type: "hbar",
+          title: "回撤后回本所需的涨幅",
+          labels: ["-20%", "-30%", "-50%", "-78%"],
+          values: [25, 43, 100, 355],
+          unit: "%",
+          highlight: 3,
+        },
+      },
+
       {
         t: "p",
         text: "这就是为什么“先卖掉、跌下来再买回”比听起来难得多：你既需要市场跌到足以覆盖回本数学的深度，又需要在感受最差的底部真的按下买入键——而那恰恰是最难按下去的时刻。",

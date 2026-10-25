@@ -33,6 +33,18 @@ export const financeCompound: Post = {
       ],
     },
     {
+      t: "chart",
+      chart: {
+        type: "hbar",
+        title: "Where the growth lands: $10k at 8% by decade",
+        labels: ["Years 1-10", "Years 11-20", "Years 21-30"],
+        values: [11600, 25000, 54000],
+        unit: "",
+        highlight: 2,
+      },
+    },
+
+    {
       t: "p",
       text: "This is why interruption is so expensive. Every withdrawal, every \"I'll restart next year,\" every reset to chase a better fund puts you back on the flat part of the curve. People don't fail at compounding because they picked the wrong asset. They fail because **the average holding period is a fraction of the period the math requires**. This is also why the [emergency fund](/posts/finance-emergency-fund) comes before investing: it's the thing that stops life's surprises from interrupting the curve.",
     },
@@ -84,6 +96,18 @@ export const financeCompound: Post = {
           "第 30 年末：约 100,600 —— **最后一个十年涨了约 54,000，超过全部结果的一半**",
         ],
       },
+      {
+        t: "chart",
+        chart: {
+          type: "hbar",
+          title: "增长都落在哪：1 万本金、年化 8%、按十年计",
+          labels: ["第 1-10 年", "第 11-20 年", "第 21-30 年"],
+          values: [11600, 25000, 54000],
+          unit: "",
+          highlight: 2,
+        },
+      },
+
       {
         t: "p",
         text: "这就是为什么中断如此昂贵。每一次取出、每一次“明年重新开始”、每一次为换“更好的标的”而清仓，都把你扔回曲线的平坦段。人们复利失败，很少因为选错了资产，而是因为**实际持有期远短于数学要求的周期**。这也是为什么[备用金](/posts/finance-emergency-fund)排在投资之前：它存在的意义就是阻止生活意外打断这条曲线。",
